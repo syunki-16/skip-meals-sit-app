@@ -1,1 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>欠食申請フォーム</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>芝浦工業大学駅伝部 欠食申請フォーム</h1>
+
+    {% if announcements %}
+      <div class="announcement-box">
+        <h2>★お知らせ</h2>
+        <ul>
+          {% for ann in announcements %}
+            <li><strong>{{ ann.name }}：</strong> {{ ann.message }} 　（期限：{{ ann.start_date }} 〜 {{ ann.end_date }}）</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <form action="/submit" method="POST">
+      <label for="name">名前：</label>
+      <select name="name" id="name" required>
+        <option value="">―選択―</option>
+        {% for n in names %}
+          <option value="{{ n }}">{{ n }}</option>
+        {% endfor %}
+      </select><br>
+
+      <label for="date">申請する日付：</label>
+      <input type="date" id="date" name="date" required><br>
+
+      <label>欠食する食事：</label>
+      <label><input type="checkbox" name="meal" value="朝"> 朝</label>
+      <label><input type="checkbox" name="meal" value="夜"> 夜</label><br>
+
+      <button type="submit">提出</button>
+    </form>
+
+    <div class="links">
+      <a href="/today">▶本日の欠食者</a>
+      <a href="/past">▶過去の欠食者</a>
+      <a href="/announcement">▶お知らせ記入</a>
+    </div>
+  </div>
+</body>
+</html>
 
