@@ -1,84 +1,75 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    font-family: sans-serif;
     margin: 0;
     padding: 0;
-    background-image: linear-gradient(45deg, #006400 25%, transparent 25%),
-                      linear-gradient(-45deg, #006400 25%, transparent 25%),
-                      linear-gradient(45deg, transparent 75%, #006400 75%),
-                      linear-gradient(-45deg, transparent 75%, #006400 75%);
-    background-size: 40px 40px;
-    background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
+    background-color: #f9f9f9;
+}
+
+.header {
+    background-image: repeating-linear-gradient(45deg, #c2e59c 0, #c2e59c 20px, #88d498 20px, #88d498 40px);
+    color: white;
+    text-align: center;
+    padding: 60px 0;
+    position: relative;
+}
+
+.header h1 {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    font-size: 2.2em;
+    background-color: rgba(0,0,0,0.4);
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 10px;
 }
 
 .container {
-    background-color: white;
-    max-width: 700px;
+    max-width: 600px;
     margin: 30px auto;
+    background: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
-h1 {
-    text-align: center;
-    color: #006400;
-}
-
-label {
+form label {
     display: block;
-    margin-top: 10px;
+    margin-top: 15px;
     font-weight: bold;
 }
 
-input[type="text"], input[type="date"], select {
+form input[type="date"],
+form select {
     width: 100%;
     padding: 8px;
-    margin-top: 4px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    margin-top: 5px;
+    box-sizing: border-box;
 }
 
-input[type="checkbox"] {
-    margin-right: 5px;
+form input[type="checkbox"] {
+    margin-right: 8px;
 }
 
-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #006400;
+form button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4caf50;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
 }
 
-button:hover {
-    background-color: #004d00;
+form button:hover {
+    background-color: #45a049;
 }
 
-.notice-section {
-    background-color: #e8f5e9;
-    border-left: 6px solid #2e7d32;
+.announcement-box {
+    background-color: #fff8dc;
+    border-left: 5px solid #f0a500;
     padding: 10px;
     margin-bottom: 20px;
-}
-
-.links {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.links a {
-    margin: 0 10px;
-    color: #006400;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.links a:hover {
-    text-decoration: underline;
+    border-radius: 5px;
 }
