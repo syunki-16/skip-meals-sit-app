@@ -1,62 +1,61 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>芝浦工業大学駅伝部 欠食申請フォーム</title>
-    <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8">
+  <title>欠食申請フォーム</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<div class="checkered-header">
-    <h1>芝浦工業大学駅伝部 欠食申請フォーム</h1>
-</div>
-
-<div class="form-container">
-    <!-- お知らせの表示 -->
-    {% if announcements %}
-    <div class="announcement-box">
-        <h2>📢 お知らせ</h2>
-        {% for item in announcements %}
-            <div class="announcement-item">
-                <p><strong>{{ item.writer }}</strong>：{{ item.message }}</p>
-            </div>
-        {% endfor %}
+  <div class="container">
+    <div class="title-box">
+      <h1>芝浦工業大学駅伝部 欠食申請フォーム</h1>
     </div>
-    {% endif %}
 
     <form action="/" method="POST">
-        <label for="name">名前：</label>
-        <select id="name" name="name" required>
-            <option value="">ー選択ー</option>
-            {% for n in names %}
-                <option value="{{ n }}">{{ n }}</option>
-            {% endfor %}
-        </select>
+      <label for="name">名前：</label>
+      <select name="name" id="name" required>
+        <option value="">ー選択ー</option>
+        {% for name in names %}
+        <option value="{{ name }}">{{ name }}</option>
+        {% endfor %}
+      </select>
 
-        <label for="date">申請する日付：</label>
-        <input type="date" id="date" name="date" required>
+      <label for="date">申請する日付：</label>
+      <input type="date" id="date" name="date" required>
 
-        <label>欠食する食事：</label>
-        <div class="checkbox-row">
-            <label><input type="checkbox" name="breakfast"> 朝</label>
-            <label><input type="checkbox" name="dinner"> 夜</label>
-        </div>
+      <label>欠食する食事：</label>
+      <div class="horizontal-checks">
+        <input type="checkbox" id="breakfast" name="breakfast">
+        <label for="breakfast">朝</label>
+        <input type="checkbox" id="dinner" name="dinner">
+        <label for="dinner">夜</label>
+      </div>
 
-        <button type="submit">提出</button>
+      <button type="submit">提出</button>
     </form>
 
-    <!-- お知らせ投稿フォーム -->
-    <form action="/announcement" method="POST" class="announce-form">
-        <h3>お知らせ入力フォーム：</h3>
-        <input type="text" name="writer" placeholder="名前（任意）">
-        <input type="text" name="message" placeholder="お知らせ内容（任意）">
-        <button type="submit">送信</button>
+    <hr>
+
+    <form action="/announcement" method="POST">
+      <h2>お知らせ入力フォーム：</h2>
+      <input type="text" name="author" placeholder="名前（任意）">
+      <input type="text" name="content" placeholder="お知らせ内容（任意）">
+      
+      <label for="start_date">表示開始日：</label>
+      <input type="date" name="start_date" required>
+      <label for="end_date">表示終了日：</label>
+      <input type="date" name="end_date" required>
+
+      <button type="submit">送信</button>
     </form>
 
-    <div class="link-row">
-        <a href="/list">▶ 本日の欠食者</a>
-        <a href="/past">▶ 過去の欠食者</a>
-        <a href="/future">▶ 今後の欠食者</a>
+    <div class="nav-links">
+      <a href="/list">▶ 本日の欠食者</a>
+      <a href="/past">▶ 過去の欠食者</a>
+      <a href="/future">▶ 今後の欠食者</a>
+      <a href="/announcement">▶ お知らせ記入</a>
     </div>
-</div>
+  </div>
 </body>
 </html>
+
