@@ -55,6 +55,7 @@ def today():
 def future():
     today = datetime.today().strftime('%Y-%m-%d')
     df = pd.read_csv(DATA_PATH)
+    df["date"] = pd.to_datetime(df["date"]).dt.strftime('%Y-%m-%d')
     df_future = df[df["date"] > today].sort_values(by="date")
     return render_template("future.html", records=df_future.to_dict(orient="records"))
 
@@ -69,8 +70,12 @@ def delete_meal(index):
 @app.route('/past')
 def past():
     today = datetime.today().strftime('%Y-%m-%d')
-    df = pd.read_csv(DATA_PATH)
-    df_past = df[df["date"] < today].sort_values(by="date", ascending=False)
+    try:
+        df = pd.read_csv(DATA_PATH)
+        df["date"] = pd.to_datetime(df["date"]).dt.strftime('%Y-%m-%d')
+        df_past = df[df["date"] < today].sort_values(by="date", ascending=False)
+    except Exception as e:
+        df_past = pd.DataFrame()
     return render_template("past.html", records=df_past.to_dict(orient="records"))
 
 @app.route('/announcement', methods=["GET", "POST"])
