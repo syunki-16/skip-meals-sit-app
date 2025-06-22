@@ -3,69 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>欠食申請フォーム</title>
+    <title>芝浦工業大学駅伝部欠食申請フォーム</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="checkered-background">
-        <h1 class="title">芝浦工業大学 駅伝部 欠食申請フォーム</h1>
+        <h1 class="title">芝浦工業大学駅伝部欠食申請フォーム</h1>
     </div>
 
-    <div class="form-container">
-        {% if error %}<p class="error">{{ error }}</p>{% endif %}
-
-        <form method="POST">
-            <label for="name">名前：</label>
-            <select name="name" id="name" required>
-                <option value="">選択してください</option>
-                {% for n in names %}
-                    <option value="{{ n }}">{{ n }}</option>
-                {% endfor %}
-            </select><br>
-
-            <label for="date">日付：</label>
-            <input type="date" name="date" id="date" required><br>
-
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="meal" value="朝"> 朝</label>
-                <label><input type="checkbox" name="meal" value="夜"> 夜</label>
-            </div>
-
-            <button type="submit">申請提出する</button>
-        </form>
-
-        <hr>
-
-        <form method="POST" action="/announcement">
-            <div class="announcement-inline">
-                <input type="text" name="author" placeholder="名前" required>
-                <input type="text" name="content" placeholder="お知らせ内容" required>
-                <input type="date" name="start_date" required>
-                <input type="date" name="end_date" required>
-                <button type="submit">お知らせ登録</button>
-            </div>
+    <div class="container">
+        <!-- お知らせ入力欄 -->
+        <form action="/announcement" method="post" class="announcement-form">
+            <input type="text" name="author" placeholder="名前" required>
+            <input type="text" name="message" placeholder="お知らせ内容" required>
+            <input type="date" name="start_date" required>
+            <input type="date" name="end_date" required>
+            <button type="submit">お知らせ送信</button>
         </form>
 
         {% if announcements %}
-        <div class="announcements">
-            <h2>お知らせ</h2>
-            <ul>
-                {% for a in announcements %}
-                <li>
-                    <strong>{{ a.author }}</strong>: {{ a.content }}<br>
-                    <small>{{ a.start_date }} 〜 {{ a.end_date }}</small>
-                    <form method="POST" action="/delete_announcement" style="display:inline;">
-                        <input type="hidden" name="id" value="{{ a.id }}">
-                        <button type="submit">削除</button>
-                    </form>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+            <div class="announcements">
+                <h2>現在のお知らせ</h2>
+                <ul>
+                    {% for ann in announcements %}
+                        <li>
+                            {{ ann['start_date'] }}〜{{ ann['end_date'] }}「{{ ann['author'] }}」：{{ ann['message'] }}
+                            <form action="/delete_announcement" method="post" style="display:inline">
+                                <input type="hidden" name="index" value="{{ loop.index0 }}">
+                                <button type="submit">削除</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         {% endif %}
 
-        <hr>
-        <a href="/future">今後の欠食者</a> / <a href="/today">本日の欠食者</a>
+        <!-- 芝浦工業大学駅伝部欠食申請フォーム -->
+        <form action="/submit" method="post">
+            <label for="name">名前：</label>
+            <select name="name" id="name" required>
+                {% for name in names %}
+                <option value="{{ name }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="date">日付：</label>
+            <input type="date" id="date" name="date" required>
+
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="morning" value="1"> 朝</label>
+                <label><input type="checkbox" name="night" value="1"> 夜</label>
+            </div>
+
+            <button type="submit">申請提出</button>
+        </form>
+
+        <div class="links">
+            <a href="/future">今後の欠食者</a> |
+            <a href="/today">本日の欠食者</a>
+        </div>
     </div>
 </body>
 </html>
+
