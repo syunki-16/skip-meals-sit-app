@@ -1,1 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>過去の欠食者一覧</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>過去の欠食者一覧</h1>
+
+    {% if records %}
+      <table>
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>名前</th>
+            <th>食事</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in records %}
+          <tr>
+            <td>{{ r.date }}</td>
+            <td>{{ r.name }}</td>
+            <td>{{ r.meal }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>過去の欠食者データはありません。</p>
+    {% endif %}
+
+    <div class="links">
+      <a href="/">&larr; フォームに戻る</a>
+      <a href="/today">▶ 本日の欠食者</a>
+    </div>
+  </div>
+</body>
+</html>
 
