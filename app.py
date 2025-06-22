@@ -8,16 +8,12 @@ app = Flask(__name__)
 DATA_PATH = "data/skip_data.csv"
 ANNOUNCEMENT_PATH = "data/announcements.csv"
 
-# 初期データファイルが存在しなければ作成
 if not os.path.exists(DATA_PATH):
-    df = pd.DataFrame(columns=["name", "date", "meal"])
-    df.to_csv(DATA_PATH, index=False)
+    pd.DataFrame(columns=["name", "date", "meal"]).to_csv(DATA_PATH, index=False)
 
 if not os.path.exists(ANNOUNCEMENT_PATH):
-    df = pd.DataFrame(columns=["name", "message", "start_date", "end_date"])
-    df.to_csv(ANNOUNCEMENT_PATH, index=False)
+    pd.DataFrame(columns=["name", "message", "start_date", "end_date"]).to_csv(ANNOUNCEMENT_PATH, index=False)
 
-# 全員の名前
 ALL_NAMES = [
     "徳本監督", "岡田コーチ", "内山壽頼", "大森隼人", "菊池笙", "國井優仁", "佐竹響", "長谷川琉斗", "本田伊吹", "横尾皓",
     "石井達也", "植田航生", "宇野利希", "小坂悠太", "澤田悠斗", "塩崎浩貴", "新城陽", "丹野暁翔", "永田覇人", "米原大祐",
@@ -29,9 +25,7 @@ ALL_NAMES = [
 def form():
     today = datetime.today().strftime('%Y-%m-%d')
     ann_df = pd.read_csv(ANNOUNCEMENT_PATH)
-    ann_df = ann_df[
-        (ann_df["start_date"] <= today) & (ann_df["end_date"] >= today)
-    ]
+    ann_df = ann_df[(ann_df["start_date"] <= today) & (ann_df["end_date"] >= today)]
     return render_template("form.html", names=ALL_NAMES, announcements=ann_df.to_dict(orient="records"))
 
 @app.route('/submit', methods=["POST"])
@@ -56,6 +50,14 @@ def today():
     df = pd.read_csv(DATA_PATH)
     df_today = df[df["date"] == today]
     return render_template("list.html", records=df_today.to_dict(orient="records"), date=today)
+
+@app.route('/delete_meal/<int:index>', methods=['POST'])
+def delete_meal(index):
+    df = pd.read_csv(DATA_PATH)
+    if index < len(df):
+        df = df.drop(index).reset_index(drop=True)
+        df.to_csv(DATA_PATH, index=False)
+    return redirect(url_for("today"))
 
 @app.route('/past')
 def past():
@@ -84,7 +86,7 @@ def announcement():
         }])], ignore_index=True)
         df.to_csv(ANNOUNCEMENT_PATH, index=False)
         return redirect(url_for("form"))
-    
+
     return render_template("announcement.html", names=ALL_NAMES)
 
 @app.route('/delete_announcement/<int:index>', methods=["POST"])
@@ -98,4 +100,3 @@ def delete_announcement(index):
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
-
