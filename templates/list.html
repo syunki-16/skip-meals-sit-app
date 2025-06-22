@@ -11,11 +11,13 @@
     <h1>{{ date }} の欠食者</h1>
 
     {% if records %}
+      <form method="POST">
       <table>
         <thead>
           <tr>
             <th>名前</th>
             <th>食事</th>
+            <th>削除</th>
           </tr>
         </thead>
         <tbody>
@@ -23,10 +25,16 @@
           <tr>
             <td>{{ r.name }}</td>
             <td>{{ r.meal }}</td>
+            <td>
+              <form method="POST" action="/delete_meal/{{ loop.index0 }}" style="display:inline">
+                <button type="submit" onclick="return confirm('削除してもよろしいですか？')">✖</button>
+              </form>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+      </form>
     {% else %}
       <p>本日の欠食者はいません。</p>
     {% endif %}
@@ -38,4 +46,3 @@
   </div>
 </body>
 </html>
-
