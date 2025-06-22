@@ -2,32 +2,40 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>本日の欠食者一覧</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今週の欠食者一覧</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    <div class="checkered-header">
+        <h1>今週の欠食者一覧</h1>
+    </div>
     <div class="container">
-        <h1>本日の欠食者（{{ date }}）</h1>
-        {% if records %}
-            <table>
-                <tr><th>名前</th><th>食事</th><th>削除</th></tr>
-                {% for record in records %}
-                <tr>
-                    <td>{{ record.name }}</td>
-                    <td>{{ record.meal }}</td>
-                    <td>
-                        <form action="{{ url_for('delete_meal', index=loop.index0) }}" method="post">
-                            <button type="submit">削除</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
+        {% if data.empty %}
+            <p>今週の欠食申請はまだありません。</p>
         {% else %}
-            <p>本日の欠食者はまだ申請されていません。</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>名前</th>
+                        <th>日付</th>
+                        <th>朝</th>
+                        <th>夜</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i, row in data.iterrows() %}
+                        <tr>
+                            <td>{{ row['名前'] }}</td>
+                            <td>{{ row['日付'] }}</td>
+                            <td>{{ row['朝'] }}</td>
+                            <td>{{ row['夜'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% endif %}
-        <br>
-        <a href="/">フォームへ戻る</a>
     </div>
 </body>
 </html>
+
