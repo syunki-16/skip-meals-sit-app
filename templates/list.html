@@ -1,48 +1,33 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>本日の欠食者</title>
-  <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <title>本日の欠食者一覧</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>{{ date }} の欠食者</h1>
-
-    {% if records %}
-      <form method="POST">
-      <table>
-        <thead>
-          <tr>
-            <th>名前</th>
-            <th>食事</th>
-            <th>削除</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for r in records %}
-          <tr>
-            <td>{{ r.name }}</td>
-            <td>{{ r.meal }}</td>
-            <td>
-              <form method="POST" action="/delete_meal/{{ loop.index0 }}" style="display:inline">
-                <button type="submit" onclick="return confirm('削除してもよろしいですか？')">✖</button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      </form>
-    {% else %}
-      <p>本日の欠食者はいません。</p>
-    {% endif %}
-
-    <div class="links">
-      <a href="/">&larr; フォームに戻る</a>
-      <a href="/past">▶ 過去の欠食者</a>
+    <div class="container">
+        <h1>本日の欠食者（{{ date }}）</h1>
+        {% if records %}
+            <table>
+                <tr><th>名前</th><th>食事</th><th>削除</th></tr>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.name }}</td>
+                    <td>{{ record.meal }}</td>
+                    <td>
+                        <form action="{{ url_for('delete_meal', index=loop.index0) }}" method="post">
+                            <button type="submit">削除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>本日の欠食者はまだ申請されていません。</p>
+        {% endif %}
+        <br>
+        <a href="/">フォームへ戻る</a>
     </div>
-  </div>
 </body>
 </html>
