@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お知らせ入力</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>お知らせ入力フォーム</h1>
+
+    <form action="/announcement" method="POST">
+      <label for="name">名前：</label>
+      <select name="name" id="name" required>
+        <option value="">―選択―</option>
+        {% for n in names %}
+          <option value="{{ n }}">{{ n }}</option>
+        {% endfor %}
+      </select><br>
+
+      <label for="message">お知らせ内容：</label>
+      <textarea name="message" id="message" rows="4" required></textarea><br>
+
+      <label for="start_date">表示開始日：</label>
+      <input type="date" name="start_date" id="start_date" required><br>
+
+      <label for="end_date">表示終了日：</label>
+      <input type="date" name="end_date" id="end_date" required><br>
+
+      <button type="submit">お知らせを追加</button>
+    </form>
+
+    <div class="links">
+      <a href="/">&larr; フォームに戻る</a>
+    </div>
+  </div>
+</body>
+</html>
 
