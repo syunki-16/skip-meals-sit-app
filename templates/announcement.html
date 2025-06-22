@@ -12,12 +12,7 @@
 
     <form action="/announcement" method="POST">
       <label for="name">名前：</label>
-      <select name="name" id="name" required>
-        <option value="">―選択―</option>
-        {% for n in names %}
-          <option value="{{ n }}">{{ n }}</option>
-        {% endfor %}
-      </select><br>
+      <input type="text" name="name" id="name" required><br>
 
       <label for="message">お知らせ内容：</label>
       <textarea name="message" id="message" rows="4" required></textarea><br>
@@ -37,4 +32,3 @@
   </div>
 </body>
 </html>
-
