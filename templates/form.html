@@ -2,46 +2,65 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>欠食申請フォーム</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIT欠食申請フォーム</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <div class="header">
-        <h1>欠食申請フォーム</h1>
+    <div class="checkered-header">
+        <h1>SIT欠食申請フォーム</h1>
     </div>
 
     <div class="container">
-        {% if announcements %}
-            <div class="announcement-box">
-                {% for item in announcements %}
-                    <p><strong>{{ item.name }}:</strong> {{ item.content }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        <form action="/submit" method="post">
-            <label for="name">名前:</label>
-            <select name="name" required>
-                <option value="">選択してください</option>
+        <form action="/submit" method="POST">
+            <label for="name">名前：</label>
+            <select name="name" id="name" required>
                 {% for name in names %}
                 <option value="{{ name }}">{{ name }}</option>
                 {% endfor %}
             </select>
 
-            <label for="date">欠食日:</label>
+            <label for="date">欠食日：</label>
             <input type="date" name="date" required>
 
-            <label>欠食:</label><br>
-            <input type="checkbox" name="morning" value="1"> 朝食
-            <input type="checkbox" name="night" value="1"> 夕食<br><br>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="morning"> 朝</label>
+                <label><input type="checkbox" name="night"> 夜</label>
+            </div>
 
-            <button type="submit">送信</button>
+            <button type="submit">申請する</button>
         </form>
 
-        <a href="/list">本日の欠食者</a> |
-        <a href="/past">過去の欠食者</a> |
-        <a href="/future">今後の欠食者</a> |
-        <a href="/announcement">お知らせ入力</a>
+        <h2>お知らせ投稿</h2>
+        <form action="/announcement" method="POST">
+            <input type="text" name="writer" placeholder="名前（任意）">
+            <input type="text" name="content" placeholder="お知らせ内容を入力" required>
+            <input type="date" name="start_date" required>
+            <input type="date" name="end_date" required>
+            <button type="submit">投稿</button>
+        </form>
+
+        <h2>現在のお知らせ</h2>
+        {% for idx, row in announcements.iterrows() %}
+        <div class="announcement">
+            <p><strong>{{ row["名前"] }}</strong>：{{ row["内容"] }}（{{ row["開始日"] }}〜{{ row["終了日"] }}）</p>
+            <form action="/delete_announcement" method="POST">
+                <input type="hidden" name="index" value="{{ idx }}">
+                <button type="submit">削除</button>
+            </form>
+        </div>
+        {% endfor %}
+
+        <h2>本日の欠食者</h2>
+        {% for idx, row in skips.iterrows() %}
+        <div class="skip-entry">
+            <p>{{ row["日付"] }}：{{ row["名前"] }}（{{ row["朝"] }} {{ row["夜"] }}）</p>
+            <form action="/delete" method="POST">
+                <input type="hidden" name="index" value="{{ idx }}">
+                <button type="submit">削除</button>
+            </form>
+        </div>
+        {% endfor %}
     </div>
 </body>
 </html>
