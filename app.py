@@ -51,13 +51,20 @@ def today():
     df_today = df[df["date"] == today]
     return render_template("list.html", records=df_today.to_dict(orient="records"), date=today)
 
-@app.route('/delete_meal/<int:index>', methods=['POST'])
+@app.route('/future')
+def future():
+    today = datetime.today().strftime('%Y-%m-%d')
+    df = pd.read_csv(DATA_PATH)
+    df_future = df[df["date"] > today].sort_values(by="date")
+    return render_template("future.html", records=df_future.to_dict(orient="records"))
+
+@app.route('/delete_meal/<int:index>', methods=['GET', 'POST'])
 def delete_meal(index):
     df = pd.read_csv(DATA_PATH)
     if index < len(df):
         df = df.drop(index).reset_index(drop=True)
         df.to_csv(DATA_PATH, index=False)
-    return redirect(url_for("today"))
+    return redirect(url_for("form"))
 
 @app.route('/past')
 def past():
@@ -87,7 +94,7 @@ def announcement():
         df.to_csv(ANNOUNCEMENT_PATH, index=False)
         return redirect(url_for("form"))
 
-    return render_template("announcement.html", names=ALL_NAMES)
+    return render_template("announcement.html")
 
 @app.route('/delete_announcement/<int:index>', methods=["POST"])
 def delete_announcement(index):
