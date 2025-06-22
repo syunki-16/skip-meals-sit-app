@@ -1,59 +1,54 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>欠食申請フォーム</title>
-  <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <title>欠食申請フォーム</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>芝浦工業大学駅伝部 欠食申請フォーム</h1>
+    <div class="container">
+        <h1>欠食申請フォーム</h1>
 
-    {% if announcements %}
-      <div class="announcement-box">
-        <h2>★お知らせ</h2>
-        <ul>
-          {% for ann in announcements %}
-            <li>
-              <strong>{{ ann.name }}：</strong> {{ ann.message }}
-              <span>（{{ ann.start_date }} 〜 {{ ann.end_date }}）</span>
-              <form method="POST" action="/delete_announcement/{{ loop.index0 }}" style="display:inline">
-                <button type="submit" onclick="return confirm('このお知らせを削除しますか？')">✖</button>
-              </form>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
+        {% if notices %}
+        <div class="notice-section">
+            <h2>お知らせ</h2>
+            <ul>
+                {% for item in notices %}
+                    <li>{{ item.date }} - {{ item.author }}: {{ item.notice }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
 
-    <form action="/submit" method="POST">
-      <label for="name">名前：</label>
-      <select name="name" id="name" required>
-        <option value="">―選択―</option>
-        {% for n in names %}
-          <option value="{{ n }}">{{ n }}</option>
-        {% endfor %}
-      </select><br>
+        <form method="POST" action="/submit">
+            <label for="name">名前：</label>
+            <select name="name" id="name" required>
+                <option value="">選択してください</option>
+                {% for name in names %}
+                    <option value="{{ name }}">{{ name }}</option>
+                {% endfor %}
+            </select><br>
 
-      <label for="date">申請する日付：</label>
-      <input type="date" id="date" name="date" required><br>
+            <label for="date">日付：</label>
+            <input type="date" id="date" name="date" value="{{ date }}" required><br>
 
-      <label>欠食する食事：</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" name="meal" value="朝"> 朝</label>
-        <label><input type="checkbox" name="meal" value="夜"> 夜</label>
-      </div>
+            <label>欠食：</label>
+            <label><input type="checkbox" name="meal" value="朝"> 朝</label>
+            <label><input type="checkbox" name="meal" value="夜"> 夜</label><br>
 
-      <button type="submit">提出</button>
-    </form>
+            <label for="notice_author" style="white-space: nowrap;">お知らせ入力フォーム：</label>
+            <input type="text" id="notice_author" name="notice_author" placeholder="名前（任意）">
+            <input type="text" name="notice" placeholder="お知らせ内容（任意）" style="width: 60%;"><br>
 
-    <div class="links">
-      <a href="/today">▶ 本日の欠食者</a>
-      <a href="/past">▶ 過去の欠食者</a>
-      <a href="/future">▶ 今後の欠食者</a>
-      <a href="/announcement">▶ お知らせ記入</a>
+            <button type="submit">送信</button>
+        </form>
+
+        <div class="links">
+            <a href="/list">本日の欠食者一覧</a> |
+            <a href="/future">今後の欠食者</a> |
+            <a href="/past">過去の欠食者</a> |
+            <a href="/announcement">お知らせ一覧</a>
+        </div>
     </div>
-  </div>
 </body>
 </html>
