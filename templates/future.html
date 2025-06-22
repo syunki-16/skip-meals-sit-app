@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>未来の欠食者一覧</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>未来の欠食者一覧</h1>
+
+    {% if records %}
+      <table>
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>名前</th>
+            <th>食事</th>
+            <th>削除</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in records %}
+          <tr>
+            <td>{{ r.date }}</td>
+            <td>{{ r.name }}</td>
+            <td>{{ r.meal }}</td>
+            <td>
+              <form method="POST" action="/delete_meal/{{ loop.index0 }}" style="display:inline">
+                <button type="submit" onclick="return confirm('削除してもよろしいですか？')">✖</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>未来の欠食者データはありません。</p>
+    {% endif %}
+
+    <div class="links">
+      <a href="/">&larr; フォームに戻る</a>
+      <a href="/today">▶ 本日の欠食者</a>
+      <a href="/past">▶ 過去の欠食者</a>
+    </div>
+  </div>
+</body>
+</html>
 
