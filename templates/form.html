@@ -1,61 +1,71 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>欠食申請フォーム</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欠食申請フォーム</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="title-box">
-      <h1>芝浦工業大学駅伝部 欠食申請フォーム</h1>
+    <div class="checkered-background">
+        <h1 class="title">芝浦工業大学 駅伝部 欠食申請フォーム</h1>
     </div>
 
-    <form action="/" method="POST">
-      <label for="name">名前：</label>
-      <select name="name" id="name" required>
-        <option value="">ー選択ー</option>
-        {% for name in names %}
-        <option value="{{ name }}">{{ name }}</option>
-        {% endfor %}
-      </select>
+    <div class="form-container">
+        {% if error %}<p class="error">{{ error }}</p>{% endif %}
 
-      <label for="date">申請する日付：</label>
-      <input type="date" id="date" name="date" required>
+        <form method="POST">
+            <label for="name">名前：</label>
+            <select name="name" id="name" required>
+                <option value="">選択してください</option>
+                {% for n in names %}
+                    <option value="{{ n }}">{{ n }}</option>
+                {% endfor %}
+            </select><br>
 
-      <label>欠食する食事：</label>
-      <div class="horizontal-checks">
-        <input type="checkbox" id="breakfast" name="breakfast">
-        <label for="breakfast">朝</label>
-        <input type="checkbox" id="dinner" name="dinner">
-        <label for="dinner">夜</label>
-      </div>
+            <label for="date">日付：</label>
+            <input type="date" name="date" id="date" required><br>
 
-      <button type="submit">提出</button>
-    </form>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="meal" value="朝"> 朝</label>
+                <label><input type="checkbox" name="meal" value="夜"> 夜</label>
+            </div>
 
-    <hr>
+            <button type="submit">申請提出する</button>
+        </form>
 
-    <form action="/announcement" method="POST">
-      <h2>お知らせ入力フォーム：</h2>
-      <input type="text" name="author" placeholder="名前（任意）">
-      <input type="text" name="content" placeholder="お知らせ内容（任意）">
-      
-      <label for="start_date">表示開始日：</label>
-      <input type="date" name="start_date" required>
-      <label for="end_date">表示終了日：</label>
-      <input type="date" name="end_date" required>
+        <hr>
 
-      <button type="submit">送信</button>
-    </form>
+        <form method="POST" action="/announcement">
+            <div class="announcement-inline">
+                <input type="text" name="author" placeholder="名前" required>
+                <input type="text" name="content" placeholder="お知らせ内容" required>
+                <input type="date" name="start_date" required>
+                <input type="date" name="end_date" required>
+                <button type="submit">お知らせ登録</button>
+            </div>
+        </form>
 
-    <div class="nav-links">
-      <a href="/list">▶ 本日の欠食者</a>
-      <a href="/past">▶ 過去の欠食者</a>
-      <a href="/future">▶ 今後の欠食者</a>
-      <a href="/announcement">▶ お知らせ記入</a>
+        {% if announcements %}
+        <div class="announcements">
+            <h2>お知らせ</h2>
+            <ul>
+                {% for a in announcements %}
+                <li>
+                    <strong>{{ a.author }}</strong>: {{ a.content }}<br>
+                    <small>{{ a.start_date }} 〜 {{ a.end_date }}</small>
+                    <form method="POST" action="/delete_announcement" style="display:inline;">
+                        <input type="hidden" name="id" value="{{ a.id }}">
+                        <button type="submit">削除</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <hr>
+        <a href="/future">今後の欠食者</a> / <a href="/today">本日の欠食者</a>
     </div>
-  </div>
 </body>
 </html>
-
